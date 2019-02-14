@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class GetArticlesController extends Controller
+class GetPostsController extends Controller
 {
     /**
      * Create a new controller instance.
