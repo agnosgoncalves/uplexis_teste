@@ -19,6 +19,6 @@ class GetPostsController extends Controller
     public function index(Request $request)
     {     
         $request->user()->authorizeRoles(['mananger']);
-        return view('home');
+        return view('posts.get-data');
     }
 }
