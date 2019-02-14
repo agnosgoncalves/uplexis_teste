@@ -8,6 +8,3 @@
 
 ## Deploy
   exec md: npm run production
-
-
-
