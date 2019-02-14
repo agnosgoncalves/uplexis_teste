@@ -18,3 +18,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/capturar-artigos', 'GetPostsController@index')->name('get-posts');
+Route::get('/artigos', 'PostController@index')->name('posts');
