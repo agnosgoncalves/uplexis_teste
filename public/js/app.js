@@ -1825,7 +1825,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var search = encodeURIComponent(this.search);
       this.loading = true;
-      axios.get("api/posts?search=".concat(search)).then(function (html) {
+      axios.get("api/posts/uplexis?search=".concat(search)).then(function (html) {
         _this.posts = _this.getDataPosts(html);
 
         _this.savePosts(_this.posts).then(function (res) {
@@ -1882,9 +1882,76 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loading: false,
+      postsData: []
+    };
+  },
   props: {
-    posts: null
+    posts: [],
+    get_db_posts: false
+  },
+  methods: {
+    remove: function remove(id) {
+      var _this = this;
+
+      this.loading = true;
+      axios.delete("api/posts/".concat(id)).then(function (res) {
+        _this.postsData.find(function (post, index) {
+          if (post.id === id) {
+            _this.$delete(_this.postsData, index);
+
+            return true;
+          }
+        });
+
+        _this.loading = false;
+
+        _this.$notify({
+          position: 'bottom right',
+          group: 'message',
+          title: 'Sucesso',
+          type: 'success',
+          text: 'artigo removido com sucesso'
+        });
+      }).catch(function (error) {
+        _this.loading = false;
+        alert(error.message);
+
+        _this.$notify({
+          position: 'bottom right',
+          group: 'message',
+          title: 'Sucesso',
+          type: 'error',
+          text: 'ocorreu um erro ao tentar excluir o artigo!'
+        });
+      });
+    }
+  },
+  watch: {
+    posts: function posts() {
+      this.postsData = this.posts;
+    }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    if (this.get_db_posts && !this.posts) {
+      this.loading = true;
+      axios.get('api/posts/all').then(function (res) {
+        _this2.loading = false;
+        _this2.postsData = res.data;
+      }).catch(function (error) {
+        _this2.loading = false;
+      });
+    } else {
+      this.postsData = this.posts;
+    }
   }
 });
 
@@ -37099,42 +37166,72 @@ var render = function() {
     "div",
     { staticClass: "card-body", attrs: { id: "search-post-results" } },
     [
-      _c(
-        "div",
-        { staticClass: "row" },
-        _vm._l(_vm.posts, function(post, key) {
-          return _c(
+      _vm.postsData && _vm.postsData.length
+        ? _c(
             "div",
-            { key: key, staticClass: "card col-12 col-md-4 post" },
-            [
-              _c("div", {
-                staticClass: "image",
-                style: "background-image:" + post.image
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "container" }, [
-                _c("div", { staticClass: "date-terms" }, [
-                  _vm._v(_vm._s(post.terms))
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "title" }, [
-                  _vm._v(_vm._s(post.title))
-                ]),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn btn-primary btn-uplexis",
-                    attrs: { href: post.link }
-                  },
-                  [_vm._v("continue lendo")]
-                )
-              ])
-            ]
+            { staticClass: "row" },
+            _vm._l(_vm.postsData, function(post, key) {
+              return _c(
+                "div",
+                { key: key, staticClass: "card col-12 col-md-4 post" },
+                [
+                  _c("div", {
+                    staticClass: "image",
+                    style: "background-image:" + post.image
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c("div", { staticClass: "date-terms" }, [
+                      _vm._v(_vm._s(post.terms))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "title" }, [
+                      _vm._v(_vm._s(post.title))
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-primary btn-uplexis",
+                        attrs: { href: post.link }
+                      },
+                      [_vm._v("continue lendo")]
+                    ),
+                    _vm._v(" "),
+                    _vm.get_db_posts
+                      ? _c(
+                          "a",
+                          {
+                            staticClass:
+                              "btn btn-primary btn-uplexis btn-danger",
+                            on: {
+                              click: function($event) {
+                                return _vm.remove(post.id)
+                              }
+                            }
+                          },
+                          [_vm._v("remover artigo")]
+                        )
+                      : _vm._e()
+                  ])
+                ]
+              )
+            }),
+            0
           )
-        }),
-        0
-      )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.loading,
+            expression: "loading"
+          }
+        ],
+        staticClass: "loading-mask"
+      })
     ]
   )
 }
@@ -50406,8 +50503,6 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('form-get-posts', __webpack_require__(/*! ./components/FormGetPosts.vue */ "./resources/js/components/FormGetPosts.vue").default);
 Vue.component('page-get-posts', __webpack_require__(/*! ./components/PageGetPosts.vue */ "./resources/js/components/PageGetPosts.vue").default);

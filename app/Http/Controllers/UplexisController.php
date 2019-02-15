@@ -8,12 +8,18 @@ use App\Post;
 
 class UplexisController extends Controller
 {
-  public function posts(Request $request)
+  public function all()
   { 
-    // $('.col.post').closest('.container')
+    $posts = Post::all();
+    return response()->json($posts);
+  }
+
+  public function uplexisPosts(Request $request)
+  { 
     $validation = $request->validate([
       'search' => 'required|min:4|max:60',
     ]);
+
     $url  = 'http://www.uplexis.com.br/blog';
     $path = $url.'?s='.$request->search;
     $html = file_get_contents($path);
@@ -36,5 +42,11 @@ class UplexisController extends Controller
     }
     $posts = Post::insert($new_posts); // save just new posts
     return response()->json($posts);
+  }
+
+  public function delete(Request $request, $postID)
+  { 
+    $post = Post::destroy($postID);
+    return response()->json($post);
   }
 }

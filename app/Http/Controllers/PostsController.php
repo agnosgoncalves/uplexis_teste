@@ -19,7 +19,7 @@ class PostsController extends Controller
   public function index(Request $request)
   {     
     $request->user()->authorizeRoles(['mananger']);
-    return view('home');
+    return view('posts.index');
   }
 
   public function search(Request $request)

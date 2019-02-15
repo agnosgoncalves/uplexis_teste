@@ -10687,13 +10687,14 @@ a.text-dark:focus {
   overflow: hidden;
   margin-bottom: 30px;
   cursor: pointer;
+  padding: 0;
 }
 
 .post .image {
   width: 100%;
   height: 200px;
   margin: 0 auto;
-  background-size: cover;
+  background-size: contain;
 }
 
 .post .date-terms {
@@ -10731,5 +10732,14 @@ a.text-dark:focus {
   text-transform: uppercase;
   margin: 0 auto;
   margin-bottom: 20px;
+}
+
+.post .btn-uplexis.btn-danger {
+  background: red;
+  color: white;
+}
+
+.post .btn-uplexis.btn-danger:hover {
+  color: white;
 }
 

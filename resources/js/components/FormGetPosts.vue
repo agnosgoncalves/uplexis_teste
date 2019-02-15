@@ -58,7 +58,7 @@
       onFindPosts () {
         var search = encodeURIComponent(this.search);
         this.loading = true
-        axios.get(`api/posts?search=${search}`).then((html) => {
+        axios.get(`api/posts/uplexis?search=${search}`).then((html) => {
           this.posts = this.getDataPosts(html);
           this.savePosts(this.posts).then((res) => {
             this.loading = false

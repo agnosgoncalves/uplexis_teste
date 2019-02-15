@@ -17,5 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('posts', 'UplexisController@posts');
+Route::delete('posts/{id}', 'UplexisController@delete');
+Route::get('posts/all', 'UplexisController@all');
+Route::get('posts/uplexis', 'UplexisController@uplexisPosts');
 Route::post('posts/save', 'UplexisController@saveDataPosts');
