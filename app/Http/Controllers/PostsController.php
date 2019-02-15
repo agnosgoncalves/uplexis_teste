@@ -21,4 +21,9 @@ class PostsController extends Controller
     $request->user()->authorizeRoles(['mananger']);
     return view('home');
   }
+
+  public function search(Request $request)
+  {     
+    print_r('batata');
+  }
 }
